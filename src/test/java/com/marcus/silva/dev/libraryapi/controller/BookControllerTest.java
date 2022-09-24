@@ -1,6 +1,7 @@
 package com.marcus.silva.dev.libraryapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.service.BookService;
@@ -27,16 +28,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class BookControllerTest {
 
-    private String URL_BOOK_API = "/api/books";
+    private static String URL_BOOK_API = "/api/books";
     @Autowired private MockMvc mockMvc;
-    @MockBean private BookService bookService;
+    @MockBean
+    private BookService bookService;
 
     @Test
     @DisplayName("Create a Book Success")
     public void createBookSuccessTest() throws Exception {
         BookResponse bookResponse = new BookResponse(1l, "Meu livro", "Autor", "12345");
-        Book book = new Book(1l, "Meu livro", "Autor", "12345");
-        BDDMockito.given(bookService.save(Mockito.any(Book.class))).willReturn(book);
+        BookSaveForm bookSaveForm = new BookSaveForm("Meu livro", "Autor", "12345");
+        BDDMockito.given(bookService.saveBook(Mockito.any(BookSaveForm.class))).willReturn(bookResponse);
         String json = new ObjectMapper().writeValueAsString(bookResponse);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post(URL_BOOK_API)
