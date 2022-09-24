@@ -1,4 +1,4 @@
-package com.marcus.silva.dev.libraryapi.dto;
+package com.marcus.silva.dev.libraryapi.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
