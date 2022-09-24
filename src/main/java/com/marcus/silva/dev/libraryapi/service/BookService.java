@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookService {
 
-    @Autowired private ModelMapper modelMapper;
+    @Autowired private ModelMapper modelMapper = new ModelMapper();
     @Autowired private BookRepository bookRepository;
 
     public BookResponse saveBook(BookSaveForm bookSaveForm){
