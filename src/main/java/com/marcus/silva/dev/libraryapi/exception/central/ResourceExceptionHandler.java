@@ -1,6 +1,7 @@
 package com.marcus.silva.dev.libraryapi.exception.central;
 
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
+import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
 import com.marcus.silva.dev.libraryapi.exception.custom.StandardError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,14 @@ public class ResourceExceptionHandler {
         String error = "ISBN ALREADY EXISTING";
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), error, isbnAlreadyExisting.getMessage(), httpServletRequest.getRequestURI());
+        return ResponseEntity.status(httpStatus).body(standardError);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException resourceNotFoundException, HttpServletRequest httpServletRequest) {
+        String error = "OBJECT NOT FOUND EXCEPTION";
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), error, resourceNotFoundException.getMessage(), httpServletRequest.getRequestURI());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 }
