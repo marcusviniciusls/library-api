@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.service.BookService;
 import org.hamcrest.Matchers;
@@ -24,10 +25,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles("dev")
 @WebMvcTest
 @AutoConfigureMockMvc
 public class BookControllerTest {
@@ -62,6 +60,22 @@ public class BookControllerTest {
     @DisplayName("Create a Book Unsuccessfully")
     public void createBookUnsuccessfullyTest() throws Exception {
         String json = new ObjectMapper().writeValueAsString(null);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(URL_BOOK_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Book com o mesmo ISBN")
+    public void bookIsbnEquals() throws Exception {
+        BookSaveForm bookSaveForm = new BookSaveForm("teste", "teste", "12345");
+        String json = new ObjectMapper().writeValueAsString(bookSaveForm);
+        BDDMockito.given(bookService.saveBook(Mockito.any(BookSaveForm.class))).willThrow(new IsbnAlreadyExisting("ISBN ALREADY EXISTING"));
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post(URL_BOOK_API)
                 .contentType(MediaType.APPLICATION_JSON)
