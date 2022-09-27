@@ -1,10 +1,12 @@
 package com.marcus.silva.dev.libraryapi.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.service.BookService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("dev")
@@ -56,7 +60,15 @@ public class BookControllerTest {
 
     @Test
     @DisplayName("Create a Book Unsuccessfully")
-    public void createBookUnsuccessfullyTest(){
+    public void createBookUnsuccessfullyTest() throws Exception {
+        String json = new ObjectMapper().writeValueAsString(null);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(URL_BOOK_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
 
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

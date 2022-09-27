@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -20,7 +22,7 @@ public class BookController {
     @Autowired private BookService bookService;
 
     @PostMapping
-    public ResponseEntity<BookResponse> create(@RequestBody BookSaveForm bookSaveForm){
+    public ResponseEntity<BookResponse> create(@Valid @RequestBody BookSaveForm bookSaveForm){
         BookResponse bookResponse = bookService.saveBook(bookSaveForm);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookResponse);
     }
