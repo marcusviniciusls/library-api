@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
+import com.marcus.silva.dev.libraryapi.model.entities.Book;
+import com.marcus.silva.dev.libraryapi.model.repository.BookRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,12 +17,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("dev")
 public class BookServiceTest {
 
     @MockBean
     private BookService bookService;
+    @MockBean
+    private BookRepository bookRepository;
 
     @Test
     @DisplayName("Salva um Livro")
