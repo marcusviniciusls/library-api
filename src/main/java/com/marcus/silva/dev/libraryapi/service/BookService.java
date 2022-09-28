@@ -38,4 +38,8 @@ public class BookService {
         }
         return modelMapper.map(optionalBook.get(), BookResponse.class);
     }
+
+    public void deleteById(Long id){
+        bookRepository.deleteById(id);
+    }
 }
