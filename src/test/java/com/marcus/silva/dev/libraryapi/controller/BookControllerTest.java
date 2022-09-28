@@ -1,13 +1,10 @@
 package com.marcus.silva.dev.libraryapi.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
-import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.service.BookService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,12 +15,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
@@ -31,6 +30,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class BookControllerTest {
 
     private static String URL_BOOK_API = "/api/books";
+    private static String URL_BOOK_FIND_BY_ID = "/api/books/";
     @Autowired private MockMvc mockMvc;
     @MockBean
     private BookService bookService;
@@ -83,6 +83,38 @@ public class BookControllerTest {
                 .content(json);
 
         mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Buscar Livro com Sucesso por Id")
+    public void findBookSuccess() throws Exception {
+        BookResponse bookResponse = new BookResponse(1l, "Meu livro", "Autor", "12345");
+        BDDMockito.given(bookService.findByIdBook(Mockito.anyLong())).willReturn(bookResponse);
+        URL_BOOK_FIND_BY_ID = URL_BOOK_FIND_BY_ID + "1";
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(URL_BOOK_FIND_BY_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc
+                .perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    @Test
+    @DisplayName("Buscar Livro com sem sucesso por Id")
+    public void findBookInsuccess() throws Exception {
+        BDDMockito.given(bookService.findByIdBook(Mockito.anyLong())).willThrow(new IsbnAlreadyExisting("ISBN ALREADY EXISTING"));
+        URL_BOOK_FIND_BY_ID = URL_BOOK_FIND_BY_ID + "1";
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(URL_BOOK_FIND_BY_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc
+                .perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }
