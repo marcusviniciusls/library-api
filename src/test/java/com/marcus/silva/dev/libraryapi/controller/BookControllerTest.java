@@ -2,8 +2,10 @@ package com.marcus.silva.dev.libraryapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
+import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
+import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
 import com.marcus.silva.dev.libraryapi.service.BookService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +30,7 @@ public class BookControllerTest {
 
     private static String URL_BOOK_API = "/api/books";
     private static String URL_BOOK_FIND_BY_ID = "/api/books/";
-    private static String URL_BOOK_DELETE_BY_ID = "/api/books/";
+    private static String URL_BOOK_REFRESH_BY_ID = "/api/books/";
     @Autowired private MockMvc mockMvc;
     @MockBean
     private BookService bookService;
@@ -104,11 +106,27 @@ public class BookControllerTest {
     @Test
     @DisplayName("Buscar Livro com sem sucesso por Id")
     public void findBookInsuccess() throws Exception {
-        BDDMockito.given(bookService.findByIdBook(Mockito.anyLong())).willThrow(new IsbnAlreadyExisting("ISBN ALREADY EXISTING"));
-        URL_BOOK_FIND_BY_ID = URL_BOOK_FIND_BY_ID + "1";
+        BookResponse bookResponse = new BookResponse(1l, "Meu livro", "Autor", "12345");
+        BDDMockito.given(bookService.findByIdBook(Mockito.anyLong())).willThrow(new ResourceNotFoundException(""));
+        URL_BOOK_FIND_BY_ID = URL_BOOK_FIND_BY_ID + "2";
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(URL_BOOK_FIND_BY_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc
+                .perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Error ao atualizar o livro")
+    public void deleteBookInsuccess() throws Exception {
+        BDDMockito.given(bookService.refreshById(Mockito.anyLong(), Mockito.any(BookUpdateForm.class))).willThrow(new ResourceNotFoundException(""));
+        URL_BOOK_REFRESH_BY_ID = URL_BOOK_REFRESH_BY_ID + "2";
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(URL_BOOK_REFRESH_BY_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
         mockMvc

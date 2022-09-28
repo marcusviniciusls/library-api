@@ -3,6 +3,7 @@ package com.marcus.silva.dev.libraryapi.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
+import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
