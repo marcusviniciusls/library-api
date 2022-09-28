@@ -10,6 +10,8 @@ import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.model.repository.BookRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -52,5 +54,11 @@ public class BookService {
         book = bookFactory.convertUpdateFormInBook(book, bookUpdateForm);
         bookRepository.save(book);
         return modelMapper.map(book, BookResponse.class);
+    }
+
+    public Page<BookResponse> findAllBook(Pageable pageable){
+        Page<Book> bookPage = bookRepository.findAll(pageable);
+        Page<BookResponse> bookPageResponse = bookPage.map(b -> bookFactory.convertBookInBookResponse(b));
+        return bookPageResponse;
     }
 }

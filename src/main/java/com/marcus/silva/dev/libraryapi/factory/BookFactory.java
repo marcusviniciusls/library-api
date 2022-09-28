@@ -1,6 +1,7 @@
 package com.marcus.silva.dev.libraryapi.factory;
 
 import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
+import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,9 @@ public class BookFactory {
             book.setIsbn(bookUpdateForm.getIsbn());
         }
         return book;
+    }
+
+    public BookResponse convertBookInBookResponse(Book book){
+        return modelMapper.map(book, BookResponse.class);
     }
 }

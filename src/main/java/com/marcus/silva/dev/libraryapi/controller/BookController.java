@@ -7,6 +7,8 @@ import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.service.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,5 +43,11 @@ public class BookController {
     public ResponseEntity<BookResponse> deleteById(@PathVariable Long id, @RequestBody BookUpdateForm bookUpdateForm){
         BookResponse bookResponse = bookService.refreshById(id, bookUpdateForm);
         return ResponseEntity.ok(bookResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<BookResponse>> findAll(Pageable pageable){
+        Page<BookResponse> pageBookResponse = bookService.findAllBook(pageable);
+        return ResponseEntity.ok(pageBookResponse);
     }
 }
