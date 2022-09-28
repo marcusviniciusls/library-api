@@ -15,9 +15,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -62,5 +69,28 @@ public class BookServiceTest {
         Assertions.assertThat(bookResponse.getAuthor()).isEqualTo("Autor");
         Assertions.assertThat(bookResponse.getTitle()).isEqualTo("Meu livro");
         Assertions.assertThat(bookResponse.getIsbn()).isEqualTo("12345");
+    }
+
+    @Test
+    @DisplayName("Buscar todos os livros")
+    public void findAll(){
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        List<Book> listBook = new ArrayList<>();
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        listBook.add(new Book(1l, "title", "author", "isbn"));
+        Page<Book> page = new PageImpl<Book>(listBook, pageRequest, 10);
+        Mockito.when(bookRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
+
+        Assertions.assertThat(page.getSize()).isEqualTo(10);
+        Assertions.assertThat(page.get()).isNotEmpty();
+        Assertions.assertThat(page.get()).isNotNull();
     }
 }

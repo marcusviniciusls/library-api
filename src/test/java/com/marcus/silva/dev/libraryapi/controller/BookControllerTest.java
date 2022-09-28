@@ -16,12 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
@@ -31,6 +37,7 @@ public class BookControllerTest {
     private static String URL_BOOK_API = "/api/books";
     private static String URL_BOOK_FIND_BY_ID = "/api/books/";
     private static String URL_BOOK_REFRESH_BY_ID = "/api/books/";
+    private static String URL_BOOK_REFRESH_ALL = "/api/books/";
     @Autowired private MockMvc mockMvc;
     @MockBean
     private BookService bookService;
@@ -132,5 +139,21 @@ public class BookControllerTest {
         mockMvc
                 .perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Mostrar todos os Livros Teste")
+    public void findAllBookSuccess() throws Exception {
+        BookResponse bookResponse = new BookResponse();
+        BDDMockito.given(bookService.findAllBook(Mockito.any(Pageable.class)))
+                .willReturn(new PageImpl<BookResponse>(Arrays.asList(bookResponse)));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(URL_BOOK_REFRESH_ALL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc
+                .perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
