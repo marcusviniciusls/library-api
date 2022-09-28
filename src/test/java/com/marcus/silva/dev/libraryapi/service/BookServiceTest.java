@@ -40,4 +40,26 @@ public class BookServiceTest {
         Assertions.assertThat(bookResponse.getTitle()).isEqualTo("Meu livro");
         Assertions.assertThat(bookResponse.getIsbn()).isEqualTo("12345");
     }
+
+    @Test
+    @DisplayName("Buscar um livro por Id")
+    public void findByIdTest(){
+        BookResponse bookResponse = new BookResponse(1l, "Meu livro", "Autor", "12345");
+        BDDMockito.given(bookService.findByIdBook(Mockito.anyLong())).willReturn(bookResponse);
+        Assertions.assertThat(bookResponse.getId()).isNotNull();
+        Assertions.assertThat(bookResponse.getAuthor()).isEqualTo("Autor");
+        Assertions.assertThat(bookResponse.getTitle()).isEqualTo("Meu livro");
+        Assertions.assertThat(bookResponse.getIsbn()).isEqualTo("12345");
+    }
+
+    @Test
+    @DisplayName("Buscar um livro por Id")
+    public void findByIdInFailureTest(){
+        BookResponse bookResponse = new BookResponse(1l, "Meu livro", "Autor", "12345");
+        BDDMockito.given(bookService.findByIdBook(Mockito.anyLong())).willThrow(new IsbnAlreadyExisting("ISBN ALREADY EXISTING"));
+        Assertions.assertThat(bookResponse.getId()).isNotNull();
+        Assertions.assertThat(bookResponse.getAuthor()).isEqualTo("Autor");
+        Assertions.assertThat(bookResponse.getTitle()).isEqualTo("Meu livro");
+        Assertions.assertThat(bookResponse.getIsbn()).isEqualTo("12345");
+    }
 }
