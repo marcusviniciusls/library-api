@@ -32,4 +32,10 @@ public class LoanController {
         loanService.loanReturn(loanReturnSave);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<LoanResponse> findById(@PathVariable Long id){
+        LoanResponse loanResponse = loanService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(loanResponse);
+    }
 }
