@@ -90,4 +90,37 @@ public class LoanControllerTest {
                 .perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
+
+    @Test
+    @DisplayName("Buscar movimentacao de um livro alugado por Id")
+    public void findByIdSuccessTest() throws Exception {
+        BookResponse bookResponse = new BookResponse(1l, "Meu livro", "Autor", "12345");
+        LoanResponse loanResponse = new LoanResponse(LocalDateTime.now(), "description", "namePerson", bookResponse);
+
+        BDDMockito.given(loanService.findById(Mockito.any(Long.class))).willReturn(loanResponse);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/api/loan/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc
+                .perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("description").value(loanResponse.getDescription()))
+                .andExpect(MockMvcResultMatchers.jsonPath("namePerson").value(loanResponse.getNamePerson()))
+                .andExpect(MockMvcResultMatchers.jsonPath("dateLoan").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("bookResponse").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("Buscar movimentacao de um livro e nao achar com o ID")
+    public void findByIdInsuccessTest() throws Exception {
+        BDDMockito.given(loanService.findById(Mockito.any(Long.class))).willThrow(new ResourceNotFoundException(""));
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/api/loan/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc
+                .perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }
