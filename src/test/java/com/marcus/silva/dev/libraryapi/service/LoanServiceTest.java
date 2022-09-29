@@ -59,4 +59,23 @@ public class LoanServiceTest {
         BDDMockito.given(loanService.loanReturn(Mockito.any(LoanReturnSave.class))).willReturn(verify);
         Assertions.assertThat(verify).isEqualTo(true);
     }
+
+    @Test
+    @DisplayName("Buscar por Id um emprestimo com sucesso")
+    public void findByIdSuccessTest(){
+        BookResponse bookResponse = new BookResponse(1l, "Meu livro", "Autor", "12345");
+        LoanResponse loanResponse = new LoanResponse(LocalDateTime.now(), "description", "namePerson", bookResponse);
+        BDDMockito.given(loanService.findById(Mockito.any(Long.class))).willReturn(loanResponse);
+        Assertions.assertThat(loanResponse.getDateLoan()).isNotNull();
+        Assertions.assertThat(loanResponse.getDescription()).isEqualTo("description");
+        Assertions.assertThat(loanResponse.getNamePerson()).isEqualTo("namePerson");
+        Assertions.assertThat(loanResponse.getBookResponse()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Buscar por Id um emprestimo error")
+    public void findByIdNotSuccessTest(){
+        BDDMockito.given(loanService.findById(Mockito.any(Long.class))).willThrow(new ResourceNotFoundException(""));
+        Assertions.assertThat(ResourceNotFoundException.class).isNotNull();
+    }
 }
