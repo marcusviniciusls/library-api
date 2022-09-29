@@ -15,16 +15,10 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class BookSaveForm {
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
+    @NotBlank(message = "Title Not Found")
     private String title;
-    @NotNull
-    @NotBlank
-    @NotEmpty
+    @NotBlank(message = "Author Not Found")
     private String author;
-    @NotNull
-    @NotBlank
-    @NotEmpty
+    @NotBlank(message = "ISBN Not Found")
     private String isbn;
 }

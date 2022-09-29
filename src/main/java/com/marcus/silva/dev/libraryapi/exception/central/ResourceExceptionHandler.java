@@ -17,7 +17,7 @@ import java.time.Instant;
 public class ResourceExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<StandardError> enumInvalid(MethodArgumentNotValidException methodArgumentNotValidException, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<StandardError> methodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException, HttpServletRequest httpServletRequest) {
         String error = "CONSTRAINT NOT BLANK";
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), error, methodArgumentNotValidException.getMessage(), httpServletRequest.getRequestURI());

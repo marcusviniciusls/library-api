@@ -27,7 +27,7 @@ public class LoanController {
         return ResponseEntity.status(HttpStatus.CREATED).body(loanResponse);
     }
 
-    @PutMapping
+    @PostMapping(value = "/return")
     public ResponseEntity<?> returnLoan(@Valid @RequestBody LoanReturnSave loanReturnSave){
         loanService.loanReturn(loanReturnSave);
         return ResponseEntity.status(HttpStatus.OK).build();

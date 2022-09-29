@@ -77,4 +77,11 @@ public class BookService {
         }
         return true;
     }
+
+    public boolean verifyNotRent(Book book){
+        if (!book.isRent()){
+            throw new BookAlreadyRented("BOOK NOT RENTED");
+        }
+        return true;
+    }
 }

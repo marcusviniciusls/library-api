@@ -15,9 +15,9 @@ import javax.validation.constraints.NotEmpty;
 public class LoanSaveForm {
 
     private String description;
-    @NotBlank
+    @NotBlank(message = "Name Person Not Found")
     private String namePerson;
-    @NotEmpty
+    @NotEmpty(message = "ISBN Not Found")
     private String isbn;
 
 }

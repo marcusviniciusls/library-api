@@ -14,11 +14,7 @@ import javax.validation.constraints.NotNull;
 public class LoanReturnSave {
 
     @NotBlank
-    @NotEmpty
-    @NotNull
     private String isbn;
     @NotBlank
-    @NotEmpty
-    @NotNull
     private String namePerson;
 }

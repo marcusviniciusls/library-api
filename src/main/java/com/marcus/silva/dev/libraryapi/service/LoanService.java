@@ -46,6 +46,7 @@ public class LoanService {
 
     public boolean loanReturn(LoanReturnSave loanReturnSave){
         Book book = bookService.findByIsbn(loanReturnSave.getIsbn());
+        bookService.verifyNotRent(book);
         book.setRent(false);
         Loan loan = new Loan("Retorno de Devolucao", loanReturnSave.getNamePerson(), book);
         loanRepository.save(loan);
