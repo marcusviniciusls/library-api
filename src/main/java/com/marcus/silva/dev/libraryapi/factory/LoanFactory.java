@@ -13,7 +13,7 @@ public class LoanFactory {
     @Autowired private ModelMapper modelMapper;
 
     public Loan convertSaveFormToEntity(LoanSaveForm loanSaveForm){
-        return new Loan(loanSaveForm.getDescription(), loanSaveForm.getNamePerson());
+        return modelMapper.map(loanSaveForm, Loan.class);
     }
 
     public LoanResponse convertEntityInResponse(Loan loan){

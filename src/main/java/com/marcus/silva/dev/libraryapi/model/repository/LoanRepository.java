@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
-    @Query("SELECT l FROM Loan l WHERE l.book.id = :id")
+    @Query("SELECT l FROM Loan l WHERE l.book.id = :id AND l.status = true")
     List<Loan> findAllLoanByOneBook(@Param("id") Long id);
 }

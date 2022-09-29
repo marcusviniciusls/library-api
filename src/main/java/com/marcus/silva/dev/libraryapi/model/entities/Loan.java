@@ -21,10 +21,9 @@ public class Loan {
     private Long id;
     private boolean status = true;
     private LocalDateTime dateLoan = LocalDateTime.now();
-    private LocalDateTime dateReturn;
     private String description;
     private String namePerson;
-    private String email;
+    private String emailPerson;
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
@@ -40,12 +39,11 @@ public class Loan {
         this.book = book;
     }
 
-    public Loan(LocalDateTime dateLoan, LocalDateTime dateReturn, String description, String namePerson, String email, Book book) {
+    public Loan(LocalDateTime dateLoan, String description, String namePerson, String email, Book book) {
         this.dateLoan = dateLoan;
-        this.dateReturn = dateReturn;
         this.description = description;
         this.namePerson = namePerson;
-        this.email = email;
+        this.emailPerson = email;
         this.book = book;
     }
 }

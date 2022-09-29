@@ -36,7 +36,11 @@ public class LoanService {
         Loan loan = loanFactory.convertSaveFormToEntity(loanSaveForm);
         Book book = bookService.findByIsbn(loanSaveForm.getIsbn());
         bookService.verifyRent(book);
+        book.setDateReturn(loanSaveForm.getDateReturn());
+        book.setEmailPersonRented(loanSaveForm.getEmailPerson());
         book.setRent(true);
+        bookRepository.save(book);
+
         loan.setBook(book);
         loan = loanRepository.save(loan);
 
@@ -60,6 +64,7 @@ public class LoanService {
         if (optionalLoan.isEmpty()){
             throw new ResourceNotFoundException("LOAN NOT FOUND");
         }
+        verifyStatus(optionalLoan.get());
         LoanResponse loanResponse = modelMapper.map(optionalLoan.get(), LoanResponse.class);
         BookResponse bookResponse = modelMapper.map(optionalLoan.get().getBook(), BookResponse.class);
         loanResponse.setBookResponse(bookResponse);
@@ -78,5 +83,12 @@ public class LoanService {
             bookResponsePage.addListLoanResponse(loanResponse);
         }
         return bookResponsePage;
+    }
+
+    private boolean verifyStatus(Loan loan){
+        if (!loan.isStatus()){
+            throw new ResourceNotFoundException("LOAN NOT FOUND");
+        }
+        return true;
     }
 }

@@ -20,22 +20,22 @@ public class InitializationData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Book book = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
-        Book book1 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
-        Book book2 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
-        Book book3 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
-        Book book4 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
+        Book book = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "1", LocalDateTime.of(2022, 9, 30, 19, 00));
+        Book book1 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "2", LocalDateTime.of(2022, 10, 30, 19, 00));
+        Book book2 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "3", LocalDateTime.of(2022, 10, 30, 19, 00));
+        Book book3 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "4", LocalDateTime.of(2022, 10, 30, 19, 00));
+        Book book4 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "5", LocalDateTime.of(2022, 10, 30, 19, 00));
         bookRepository.saveAll(Arrays.asList(book, book1, book2, book3, book4));
 
-        Loan loan = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 9, 30, 19, 00),
+        Loan loan = new Loan( LocalDateTime.now(),
                 "Aluguel de livro", "Marcus", "marcus.silva.dev@gmail.com", book);
-        Loan loan1 = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 10, 30, 19, 00),
+        Loan loan1 = new Loan( LocalDateTime.now(),
                 "Aluguel de livro", "Vinicius", "marcus.silva.dev@gmail.com", book1);
-        Loan loan2 = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 10, 30, 19, 00),
+        Loan loan2 = new Loan( LocalDateTime.now(),
                 "Aluguel de livro", "Emily", "marcus.silva.dev@gmail.com", book2);
-        Loan loan3 = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 10, 30, 19, 00),
+        Loan loan3 = new Loan( LocalDateTime.now(),
                 "Aluguel de livro", "Vitoria", "marcus.silva.dev@gmail.com", book3);
-        Loan loan4 = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 10, 30, 19, 00),
+        Loan loan4 = new Loan( LocalDateTime.now(),
                 "Aluguel de livro", "Silva", "marcus.silva.dev@gmail.com", book4);
         loanRepository.saveAll(Arrays.asList(loan, loan1, loan2, loan3, loan4));
     }
