@@ -3,6 +3,7 @@ package com.marcus.silva.dev.libraryapi.service;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.exception.custom.BookAlreadyRented;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
 import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
 import com.marcus.silva.dev.libraryapi.factory.BookFactory;
@@ -60,5 +61,20 @@ public class BookService {
         Page<Book> bookPage = bookRepository.findAll(pageable);
         Page<BookResponse> bookPageResponse = bookPage.map(b -> bookFactory.convertBookInBookResponse(b));
         return bookPageResponse;
+    }
+
+    public Book findByIsbn(String isbn){
+        Optional<Book> optionalBook = bookRepository.findByIsbn(isbn);
+        if (optionalBook.isEmpty()){
+            throw new ResourceNotFoundException("BOOK NOT FOUND");
+        }
+        return optionalBook.get();
+    }
+
+    public boolean verifyRent(Book book){
+        if (book.isRent()){
+            throw new BookAlreadyRented("BOOK ALREADY RENTED");
+        }
+        return true;
     }
 }

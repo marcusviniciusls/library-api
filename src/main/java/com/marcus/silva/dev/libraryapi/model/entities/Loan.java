@@ -30,4 +30,10 @@ public class Loan {
         this.description = description;
         this.namePerson = namePerson;
     }
+
+    public Loan(String description, String namePerson, Book book) {
+        this.description = description;
+        this.namePerson = namePerson;
+        this.book = book;
+    }
 }

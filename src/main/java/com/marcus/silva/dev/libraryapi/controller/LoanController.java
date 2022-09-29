@@ -1,6 +1,7 @@
 package com.marcus.silva.dev.libraryapi.controller;
 
 
+import com.marcus.silva.dev.libraryapi.dto.request.LoanReturnSave;
 import com.marcus.silva.dev.libraryapi.dto.request.LoanSaveForm;
 
 import com.marcus.silva.dev.libraryapi.dto.response.LoanResponse;
@@ -8,10 +9,7 @@ import com.marcus.silva.dev.libraryapi.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,5 +25,11 @@ public class LoanController {
     public ResponseEntity<LoanResponse> create(@Valid @RequestBody LoanSaveForm loanSaveForm){
         LoanResponse loanResponse = loanService.saveLoan(loanSaveForm);
         return ResponseEntity.status(HttpStatus.CREATED).body(loanResponse);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> returnLoan(@Valid @RequestBody LoanReturnSave loanReturnSave){
+        loanService.loanReturn(loanReturnSave);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
