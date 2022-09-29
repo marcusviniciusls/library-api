@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.awt.desktop.AboutEvent;
 
 @Data
 @Builder
@@ -21,8 +22,16 @@ public class Book {
     private String title;
     private String author;
     private String isbn;
+    private boolean rent;
 
     public Book(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
+    public Book(Long id, String title, String author, String isbn) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
