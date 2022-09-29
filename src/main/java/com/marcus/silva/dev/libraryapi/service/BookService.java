@@ -11,6 +11,7 @@ import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.model.repository.BookRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,11 +40,20 @@ public class BookService {
         if (optionalBook.isEmpty()){
             throw new ResourceNotFoundException("BOOK NOT FOUND");
         }
+        Book book = optionalBook.get();
+        verifyStatus(book);
         return modelMapper.map(optionalBook.get(), BookResponse.class);
     }
 
     public void deleteById(Long id){
-        bookRepository.deleteById(id);
+        try {
+            bookRepository.deleteById(id);
+        }
+        catch (DataIntegrityViolationException ex){
+            Book book = bookRepository.findById(id).get();
+            book.setStatus(false);
+            bookRepository.save(book);
+        }
     }
 
     public BookResponse refreshById(Long id, BookUpdateForm bookUpdateForm){
@@ -51,6 +61,7 @@ public class BookService {
         if (optionalBook.isEmpty()){
             throw new ResourceNotFoundException("BOOK NOT FOUND");
         }
+        verifyStatus(optionalBook.get());
         Book book = optionalBook.get();
         book = bookFactory.convertUpdateFormInBook(book, bookUpdateForm);
         bookRepository.save(book);
@@ -68,6 +79,7 @@ public class BookService {
         if (optionalBook.isEmpty()){
             throw new ResourceNotFoundException("BOOK NOT FOUND");
         }
+        verifyStatus(optionalBook.get());
         return optionalBook.get();
     }
 
@@ -81,6 +93,13 @@ public class BookService {
     public boolean verifyNotRent(Book book){
         if (!book.isRent()){
             throw new BookAlreadyRented("BOOK NOT RENTED");
+        }
+        return true;
+    }
+
+    private boolean verifyStatus(Book book){
+        if (!book.isStatus()){
+            throw new ResourceNotFoundException("BOOK NOT FOUND");
         }
         return true;
     }

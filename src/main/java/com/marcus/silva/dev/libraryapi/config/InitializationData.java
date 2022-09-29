@@ -21,19 +21,22 @@ public class InitializationData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Book book = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
+        Book book1 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
+        Book book2 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
+        Book book3 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
+        Book book4 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
+        bookRepository.saveAll(Arrays.asList(book, book1, book2, book3, book4));
 
-        bookRepository.save(book);
-
-        Loan loan = new Loan(1l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan1 = new Loan(2l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan2 = new Loan(3l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan3 = new Loan(4l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan4 = new Loan(5l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan5 = new Loan(6l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan6 = new Loan(7l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan7 = new Loan(8l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan8 = new Loan(9l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        Loan loan9 = new Loan(10l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
-        loanRepository.saveAll(Arrays.asList(loan, loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9));
+        Loan loan = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 9, 30, 19, 00),
+                "Aluguel de livro", "Marcus", "marcus.silva.dev@gmail.com", book);
+        Loan loan1 = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 10, 30, 19, 00),
+                "Aluguel de livro", "Vinicius", "marcus.silva.dev@gmail.com", book1);
+        Loan loan2 = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 10, 30, 19, 00),
+                "Aluguel de livro", "Emily", "marcus.silva.dev@gmail.com", book2);
+        Loan loan3 = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 10, 30, 19, 00),
+                "Aluguel de livro", "Vitoria", "marcus.silva.dev@gmail.com", book3);
+        Loan loan4 = new Loan( LocalDateTime.now(), LocalDateTime.of(2022, 10, 30, 19, 00),
+                "Aluguel de livro", "Silva", "marcus.silva.dev@gmail.com", book4);
+        loanRepository.saveAll(Arrays.asList(loan, loan1, loan2, loan3, loan4));
     }
 }

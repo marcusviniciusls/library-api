@@ -40,7 +40,7 @@ public class LoanControllerTest {
     public void createLoanSuccess() throws Exception {
         BookResponse bookResponse = new BookResponse(1l, "Meu livro", "Autor", "12345");
         LoanResponse loanResponse = new LoanResponse(LocalDateTime.now(), "description", "namePerson", bookResponse);
-        LoanSaveForm loanSaveForm = new LoanSaveForm("description", "namePerson", "isbn");
+        LoanSaveForm loanSaveForm = new LoanSaveForm("description", "namePerson", "vinicius@outlook.com", "isbn");
 
         BDDMockito.given(loanService.saveLoan(Mockito.any(LoanSaveForm.class))).willReturn(loanResponse);
         String json = new ObjectMapper().writeValueAsString(loanSaveForm);
@@ -71,7 +71,7 @@ public class LoanControllerTest {
                 .content(json);
         mockMvc
                 .perform(request)
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
