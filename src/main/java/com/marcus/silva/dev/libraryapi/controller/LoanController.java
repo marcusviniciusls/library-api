@@ -4,6 +4,8 @@ package com.marcus.silva.dev.libraryapi.controller;
 import com.marcus.silva.dev.libraryapi.dto.request.LoanReturnSave;
 import com.marcus.silva.dev.libraryapi.dto.request.LoanSaveForm;
 
+import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.dto.response.BookResponsePage;
 import com.marcus.silva.dev.libraryapi.dto.response.LoanResponse;
 import com.marcus.silva.dev.libraryapi.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +39,11 @@ public class LoanController {
     public ResponseEntity<LoanResponse> findById(@PathVariable Long id){
         LoanResponse loanResponse = loanService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(loanResponse);
+    }
+
+    @GetMapping(value = "/book/{id}")
+    public ResponseEntity<BookResponsePage> findAllLoanPerBook(@PathVariable Long id){
+        BookResponsePage bookResponsePage = loanService.findAllLoanResponse(id);
+        return ResponseEntity.ok(bookResponsePage);
     }
 }

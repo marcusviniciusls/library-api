@@ -5,8 +5,10 @@ import com.marcus.silva.dev.libraryapi.dto.request.LoanSaveForm;
 
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 
+import com.marcus.silva.dev.libraryapi.dto.response.BookResponsePage;
 import com.marcus.silva.dev.libraryapi.dto.response.LoanResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
+import com.marcus.silva.dev.libraryapi.factory.BookFactory;
 import com.marcus.silva.dev.libraryapi.factory.LoanFactory;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.model.entities.Loan;
@@ -16,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +29,7 @@ public class LoanService {
     @Autowired private ModelMapper modelMapper;
     @Autowired private LoanRepository loanRepository;
     @Autowired private BookService bookService;
+    @Autowired private BookFactory bookFactory;
 
 
     public LoanResponse saveLoan(LoanSaveForm loanSaveForm){
@@ -60,5 +64,19 @@ public class LoanService {
         BookResponse bookResponse = modelMapper.map(optionalLoan.get().getBook(), BookResponse.class);
         loanResponse.setBookResponse(bookResponse);
         return loanResponse;
+    }
+
+    public BookResponsePage findAllLoanResponse(Long idBook){
+        List<Loan> listLoan = loanRepository.findAllLoanByOneBook(idBook);
+        Optional<Book> optionalBook = bookRepository.findById(idBook);
+        if (optionalBook.isEmpty()){
+            throw new ResourceNotFoundException("BOOK NOT FOUND");
+        }
+        BookResponsePage bookResponsePage = bookFactory.convertBookInBookResponsePage(optionalBook.get());
+        for (Loan loan : listLoan){
+            LoanResponse loanResponse = loanFactory.convertEntityInResponse(loan);
+            bookResponsePage.addListLoanResponse(loanResponse);
+        }
+        return bookResponsePage;
     }
 }

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.awt.desktop.AboutEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -22,8 +24,10 @@ public class Book {
     private String title;
     private String author;
     private String isbn;
-
     private boolean rent = false;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
+    private List<Loan> listLoan = new ArrayList<>();
 
     public Book(String title, String author, String isbn) {
         this.title = title;
