@@ -17,4 +17,6 @@ public class LoanSaveForm {
     private String namePerson;
     @NotEmpty
     private String isbn;
+
 }
+

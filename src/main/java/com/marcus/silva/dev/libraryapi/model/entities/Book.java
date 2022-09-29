@@ -22,7 +22,8 @@ public class Book {
     private String title;
     private String author;
     private String isbn;
-    private boolean rent;
+
+    private boolean rent = false;
 
     public Book(String title, String author, String isbn) {
         this.title = title;

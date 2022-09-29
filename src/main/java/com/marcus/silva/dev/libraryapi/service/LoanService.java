@@ -1,7 +1,9 @@
 package com.marcus.silva.dev.libraryapi.service;
 
 import com.marcus.silva.dev.libraryapi.dto.request.LoanSaveForm;
+
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+
 import com.marcus.silva.dev.libraryapi.dto.response.LoanResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.BookAlreadyRented;
 import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
@@ -24,6 +26,7 @@ public class LoanService {
     @Autowired private ModelMapper modelMapper;
     @Autowired private LoanRepository loanRepository;
 
+
     public LoanResponse saveLoan(LoanSaveForm loanSaveForm){
         Loan loan = loanFactory.convertSaveFormToEntity(loanSaveForm);
         Optional<Book> optionalBook = bookRepository.findByIsbn(loanSaveForm.getIsbn());
@@ -37,6 +40,7 @@ public class LoanService {
         book.setRent(true);
         loan.setBook(book);
         loan = loanRepository.save(loan);
+
         LoanResponse loanResponse = modelMapper.map(loan, LoanResponse.class);
         BookResponse bookResponse = modelMapper.map(loan.getBook(), BookResponse.class);
         loanResponse.setBookResponse(bookResponse);
