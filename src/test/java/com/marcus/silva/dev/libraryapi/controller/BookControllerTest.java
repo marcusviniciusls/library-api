@@ -7,6 +7,7 @@ import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
 import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
 import com.marcus.silva.dev.libraryapi.service.BookService;
+import com.marcus.silva.dev.libraryapi.service.LoanService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +42,8 @@ public class BookControllerTest {
     @Autowired private MockMvc mockMvc;
     @MockBean
     private BookService bookService;
+    @MockBean
+    private LoanService loanService;
 
     @Test
     @DisplayName("Create a Book Success")

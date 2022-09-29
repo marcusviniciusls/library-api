@@ -19,8 +19,8 @@ public class InitializationData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Book book = new Book(1l, "O menino do pijama lsitrado", "Marcus Vinicius", "12345");
-        book.setRent(false);
+        Book book = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "12345");
+
         bookRepository.save(book);
 
         Loan loan = new Loan(1l, LocalDateTime.now(), "Aluguel de livro", "Vitoria", book);
