@@ -1,10 +1,8 @@
 package com.marcus.silva.dev.libraryapi.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
-import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.exception.custom.BookAlreadyRented;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.model.repository.BookRepository;
@@ -88,5 +86,21 @@ public class BookServiceTest {
         Assertions.assertThat(page.getSize()).isEqualTo(10);
         Assertions.assertThat(page.get()).isNotEmpty();
         Assertions.assertThat(page.get()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Livro Alugado")
+    public void verifyRentSuccessTest(){
+        boolean verify = true;
+        Mockito.when(bookService.verifyRent(Mockito.any(Book.class))).thenReturn(verify);
+        Assertions.assertThat(verify).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("Livro Nao Alugado Alugado")
+    public void verifyRentErrorTest(){
+        Mockito.when(bookService.verifyRent(Mockito.any(Book.class))).thenThrow(new BookAlreadyRented(""));
+        boolean verify = false;
+        Assertions.assertThat(verify).isEqualTo(false);
     }
 }

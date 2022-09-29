@@ -1,7 +1,6 @@
 package com.marcus.silva.dev.libraryapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.request.LoanSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.dto.response.LoanResponse;
@@ -25,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 @ExtendWith(SpringExtension.class)

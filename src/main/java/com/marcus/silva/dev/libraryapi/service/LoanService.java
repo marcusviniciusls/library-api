@@ -6,8 +6,6 @@ import com.marcus.silva.dev.libraryapi.dto.request.LoanSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 
 import com.marcus.silva.dev.libraryapi.dto.response.LoanResponse;
-import com.marcus.silva.dev.libraryapi.exception.custom.BookAlreadyRented;
-import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
 import com.marcus.silva.dev.libraryapi.factory.LoanFactory;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.model.entities.Loan;
@@ -16,9 +14,6 @@ import com.marcus.silva.dev.libraryapi.model.repository.LoanRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class LoanService {
