@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 public class BookReturnResponse {
 
-    private String name;
+    private String email;
     private BookResponse bookResponse;
 }

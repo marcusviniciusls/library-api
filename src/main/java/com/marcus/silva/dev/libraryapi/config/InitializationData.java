@@ -26,10 +26,15 @@ public class InitializationData implements CommandLineRunner {
         Book book3 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "4", LocalDateTime.of(2022, 10, 10, 19, 00));
         Book book4 = new Book("O menino do pijama lsitrado", "Marcus Vinicius", "5", LocalDateTime.of(2022, 11, 30, 19, 00));
         book.setRent(true);
+        book.setEmailPersonRented("marcus.silva.dev@gmail.com");
         book1.setRent(true);
+        book1.setEmailPersonRented("marcus.silva.dev@gmail.com");
         book2.setRent(true);
+        book2.setEmailPersonRented("marcus.silva.dev@gmail.com");
         book3.setRent(true);
+        book3.setEmailPersonRented("marcus.silva.dev@gmail.com");
         book4.setRent(true);
+        book4.setEmailPersonRented("marcus.silva.dev@gmail.com");
         bookRepository.saveAll(Arrays.asList(book, book1, book2, book3, book4));
 
         Loan loan = new Loan( LocalDateTime.now(),

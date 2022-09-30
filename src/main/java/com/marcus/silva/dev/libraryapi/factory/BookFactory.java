@@ -42,7 +42,7 @@ public class BookFactory {
     public BookReturnResponse convertEntityToReturnResponse(Book book){
         BookReturnResponse bookReturnResponse = new BookReturnResponse();
         BookResponse bookResponse = modelMapper.map(book, BookResponse.class);
-        bookReturnResponse.setName(book.getEmailPersonRented());
+        bookReturnResponse.setEmail(book.getEmailPersonRented());
         bookReturnResponse.setBookResponse(bookResponse);
         return bookReturnResponse;
     }
