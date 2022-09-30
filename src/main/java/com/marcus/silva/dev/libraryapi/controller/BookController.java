@@ -3,6 +3,7 @@ package com.marcus.silva.dev.libraryapi.controller;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.dto.response.BookReturnResponse;
 import com.marcus.silva.dev.libraryapi.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
@@ -23,12 +25,6 @@ public class BookController {
     public ResponseEntity<BookResponse> create(@Valid @RequestBody BookSaveForm bookSaveForm){
         BookResponse bookResponse = bookService.saveBook(bookSaveForm);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookResponse);
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<BookResponse> findById(@PathVariable Long id){
-        BookResponse bookResponse = bookService.findByIdBook(id);
-        return ResponseEntity.ok(bookResponse);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -43,9 +39,21 @@ public class BookController {
         return ResponseEntity.ok(bookResponse);
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<BookResponse> findById(@PathVariable Long id){
+        BookResponse bookResponse = bookService.findByIdBook(id);
+        return ResponseEntity.ok(bookResponse);
+    }
+
     @GetMapping
     public ResponseEntity<Page<BookResponse>> findAll(Pageable pageable){
         Page<BookResponse> pageBookResponse = bookService.findAllBook(pageable);
         return ResponseEntity.ok(pageBookResponse);
+    }
+
+    @GetMapping(value = "/return")
+    public ResponseEntity<List<BookReturnResponse>> returnBook(){
+        List<BookReturnResponse> bookReturnResponses = bookService.bookLaterAndLimitThreeDays();
+        return ResponseEntity.ok(bookReturnResponses);
     }
 }

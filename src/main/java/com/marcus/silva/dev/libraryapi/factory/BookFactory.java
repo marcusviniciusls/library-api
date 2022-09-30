@@ -3,6 +3,7 @@ package com.marcus.silva.dev.libraryapi.factory;
 import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponsePage;
+import com.marcus.silva.dev.libraryapi.dto.response.BookReturnResponse;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,13 @@ public class BookFactory {
         bookResponsePage.setAuthor(book.getAuthor());
         bookResponsePage.setIsbn(book.getIsbn());
         return bookResponsePage;
+    }
+
+    public BookReturnResponse convertEntityToReturnResponse(Book book){
+        BookReturnResponse bookReturnResponse = new BookReturnResponse();
+        BookResponse bookResponse = modelMapper.map(book, BookResponse.class);
+        bookReturnResponse.setName(book.getEmailPersonRented());
+        bookReturnResponse.setBookResponse(bookResponse);
+        return bookReturnResponse;
     }
 }

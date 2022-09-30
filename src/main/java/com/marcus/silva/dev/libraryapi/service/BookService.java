@@ -3,6 +3,7 @@ package com.marcus.silva.dev.libraryapi.service;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.dto.response.BookReturnResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.BookAlreadyRented;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
 import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
@@ -16,6 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -102,5 +106,20 @@ public class BookService {
             throw new ResourceNotFoundException("BOOK NOT FOUND");
         }
         return true;
+    }
+
+    public List<BookReturnResponse> bookLaterAndLimitThreeDays(){
+        List<Book> listBook = bookRepository.findAllBookGiveToBack();
+        List<BookReturnResponse> listBookToEmails = new ArrayList<>();
+        LocalDateTime dateNowMore10Days = LocalDateTime.now().plusDays(10);
+        for (Book book : listBook){
+            if (book.getDateReturn() != null) {
+                if (book.getDateReturn().isBefore(LocalDateTime.now()) || book.getDateReturn().isBefore(dateNowMore10Days)){
+                    BookReturnResponse bookReturnResponse = bookFactory.convertEntityToReturnResponse(book);
+                    listBookToEmails.add(bookReturnResponse);
+                }
+            }
+        }
+        return listBookToEmails;
     }
 }
