@@ -108,7 +108,7 @@ public class BookService {
         return true;
     }
 
-    public List<BookReturnResponse> bookLaterAndLimitThreeDays(){
+    public List<BookReturnResponse> bookLaterAndLimitTenDays(){
         List<Book> listBook = bookRepository.findAllBookGiveToBack();
         List<BookReturnResponse> listBookToEmails = new ArrayList<>();
         LocalDateTime dateNowMore10Days = LocalDateTime.now().plusDays(10);

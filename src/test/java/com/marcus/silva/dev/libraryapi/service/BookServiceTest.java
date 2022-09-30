@@ -2,6 +2,7 @@ package com.marcus.silva.dev.libraryapi.service;
 
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.dto.response.BookReturnResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.BookAlreadyRented;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
@@ -20,7 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
@@ -102,5 +105,19 @@ public class BookServiceTest {
         Mockito.when(bookService.verifyRent(Mockito.any(Book.class))).thenThrow(new BookAlreadyRented(""));
         boolean verify = false;
         Assertions.assertThat(verify).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("Quantidade de livros para enviar e-mail")
+    public void getBookToReturnForEmail(){
+        BookReturnResponse book1 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        BookReturnResponse book2 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        BookReturnResponse book3 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        BookReturnResponse book4 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        BookReturnResponse book5 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        List<BookReturnResponse> listBook = new ArrayList<>();
+        listBook.addAll(Arrays.asList(book5, book1, book2, book3, book4));
+        Mockito.when(bookService.bookLaterAndLimitTenDays()).thenReturn(listBook);
+        Assertions.assertThat(listBook.size()).isEqualTo(5);
     }
 }

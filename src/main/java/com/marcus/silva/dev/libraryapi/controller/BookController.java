@@ -53,7 +53,7 @@ public class BookController {
 
     @GetMapping(value = "/return")
     public ResponseEntity<List<BookReturnResponse>> returnBook(){
-        List<BookReturnResponse> bookReturnResponses = bookService.bookLaterAndLimitThreeDays();
+        List<BookReturnResponse> bookReturnResponses = bookService.bookLaterAndLimitTenDays();
         return ResponseEntity.ok(bookReturnResponses);
     }
 }

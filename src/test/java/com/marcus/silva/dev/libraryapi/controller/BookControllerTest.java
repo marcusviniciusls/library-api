@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcus.silva.dev.libraryapi.dto.request.BookSaveForm;
 import com.marcus.silva.dev.libraryapi.dto.request.BookUpdateForm;
 import com.marcus.silva.dev.libraryapi.dto.response.BookResponse;
+import com.marcus.silva.dev.libraryapi.dto.response.BookReturnResponse;
 import com.marcus.silva.dev.libraryapi.exception.custom.IsbnAlreadyExisting;
 import com.marcus.silva.dev.libraryapi.exception.custom.ResourceNotFoundException;
 import com.marcus.silva.dev.libraryapi.service.BookService;
@@ -26,7 +27,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
@@ -37,6 +40,7 @@ public class BookControllerTest {
     private static String URL_BOOK_FIND_BY_ID = "/api/books/";
     private static String URL_BOOK_REFRESH_BY_ID = "/api/books/";
     private static String URL_BOOK_REFRESH_ALL = "/api/books/";
+    private static String URL_BOOK_RETURN = "/api/books/return";
     @Autowired private MockMvc mockMvc;
     @MockBean
     private BookService bookService;
@@ -151,6 +155,27 @@ public class BookControllerTest {
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(URL_BOOK_REFRESH_ALL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        mockMvc
+                .perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("Trazer Resultados de livros para devolver")
+    public void returnBookTest() throws Exception {
+        BookReturnResponse book1 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        BookReturnResponse book2 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        BookReturnResponse book3 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        BookReturnResponse book4 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        BookReturnResponse book5 = new BookReturnResponse("vinicius@gmail.com", new BookResponse());
+        List<BookReturnResponse> listBook = new ArrayList<>();
+        listBook.addAll(Arrays.asList(book5, book1, book2, book3, book4));
+        BDDMockito.given(bookService.bookLaterAndLimitTenDays()).willReturn(listBook);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(URL_BOOK_RETURN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
         mockMvc
