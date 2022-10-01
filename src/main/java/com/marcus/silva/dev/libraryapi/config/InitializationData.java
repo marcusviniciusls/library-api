@@ -1,15 +1,20 @@
 package com.marcus.silva.dev.libraryapi.config;
 
+import com.marcus.silva.dev.libraryapi.dto.response.BookReturnResponse;
 import com.marcus.silva.dev.libraryapi.model.entities.Book;
 import com.marcus.silva.dev.libraryapi.model.entities.Loan;
 import com.marcus.silva.dev.libraryapi.model.repository.BookRepository;
 import com.marcus.silva.dev.libraryapi.model.repository.LoanRepository;
+import com.marcus.silva.dev.libraryapi.service.BookService;
+import com.marcus.silva.dev.libraryapi.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @org.springframework.context.annotation.Profile("dev")
@@ -17,6 +22,8 @@ public class InitializationData implements CommandLineRunner {
 
     @Autowired private BookRepository bookRepository;
     @Autowired private LoanRepository loanRepository;
+    @Autowired private EmailService emailService;
+    @Autowired private BookService bookService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -48,5 +55,10 @@ public class InitializationData implements CommandLineRunner {
         Loan loan4 = new Loan( LocalDateTime.now(),
                 "Aluguel de livro", "Silva", "marcus.silva.dev@gmail.com", book4);
         loanRepository.saveAll(Arrays.asList(loan, loan1, loan2, loan3, loan4));
+
+        List<BookReturnResponse> listBookReturn = bookService.bookLaterAndLimitTenDays();
+        List<String> emailList = listBookReturn.stream().map(b -> b.getEmail()).collect(Collectors.toList());
+        emailService.sendEmail("teste", emailList);
+        System.out.println("E-mails Enviados");
     }
 }
