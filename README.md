@@ -2,6 +2,10 @@
 
 Repositório relativo ao projeto de aluguel de livros. Esse projeto foi desenvolvido com um curso feito na Udemy
 
+## Certificado do Curso
+
+<img align="center" width="400" src="JUNITeMOCKITO.jpeg">
+
 ## Projeto API Library
 
 - Linguagem Java
